@@ -1,73 +1,48 @@
-// App.js
-import React, { useState } from "react";
-import "./App.css";
+// app.jsx
+import React, { useState } from 'react';
+import axios from 'axios';
 
-function App() {
-  const [values, setValues] = useState({
-    value1: "",
-    value2: "",
-    value3: "",
-    value4: "",
-  });
-  const [result, setResult] = useState("");
+const App = () => {
+  const [value1, setValue1] = useState('');
+  const [value2, setValue2] = useState('');
+  const [value3, setValue3] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues((prevState) => ({ ...prevState, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await fetch("/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
-    const data = await response.json();
-    setResult(data.result);
-  };
-
-  const handleView = async () => {
-    const response = await fetch("/view");
-    const data = await response.json();
-    setResult(data.result);
+  const handleSubmit = async () => {
+    try {
+      // Call the download_excel route
+      const response = await axios.get('/download_excel');
+      // Process the response, such as initiating a download
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
-    <div className="App">
-      <form onSubmit={handleSubmit}>
+    <div className="container">
+      <h1>Download Excel</h1>
+      <div className="form">
         <input
-          type="number"
-          name="value1"
-          value={values.value1}
-          onChange={handleChange}
+          type="text"
+          placeholder="Value 1"
+          value={value1}
+          onChange={(e) => setValue1(e.target.value)}
         />
         <input
-          type="number"
-          name="value2"
-          value={values.value2}
-          onChange={handleChange}
+          type="text"
+          placeholder="Value 2"
+          value={value2}
+          onChange={(e) => setValue2(e.target.value)}
         />
         <input
-          type="number"
-          name="value3"
-          value={values.value3}
-          onChange={handleChange}
+          type="text"
+          placeholder="Value 3"
+          value={value3}
+          onChange={(e) => setValue3(e.target.value)}
         />
-        <input
-          type="number"
-          name="value4"
-          value={values.value4}
-          onChange={handleChange}
-        />
-        <button type="submit">Submit</button>
-      </form>
-      <button onClick={handleView}>View</button>
-      <div className="output">{result}</div>
+        <button onClick={handleSubmit}>Download Excel</button>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
